@@ -4,7 +4,7 @@
   "description": "A tiny news/posting site inspired by Reddit and Hacker News.",
   "main": "main.js",
   "scripts": {
-    "dev": "nodemon main.js",
+    "dev": "nodemon main.js | pino-pretty",
     "start": "node main.js"
   },
   "repository": {
@@ -22,10 +22,13 @@
     "fastify": "^3.13.0",
     "fastify-cors": "^5.2.0",
     "fastify-formbody": "^5.0.0",
+    "fastify-jwt": "^2.3.0",
     "fastify-mongoose-api": "^1.1.7",
+    "fastify-plugin": "^3.0.0",
     "mongoose": "^5.11.18"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "pino-pretty": "^4.7.0"
   }
 }

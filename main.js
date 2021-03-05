@@ -2,6 +2,8 @@ const fastify = require('fastify')({ logger: true });
 const fastifyCors = require('fastify-cors');
 const fastifyFormbody = require('fastify-formbody');
 const fastifyMongooseAPI = require('fastify-mongoose-api');
+const fastifyJWT = require('fastify-jwt');
+
 const mongoose = require('mongoose');
 
 require('dotenv').config();
@@ -21,9 +23,26 @@ fastify.register(fastifyMongooseAPI, {
   setDefaults: true,
   methods: ['list', 'get', 'post', 'patch', 'put', 'delete', 'options'],
 });
+fastify.register(fastifyJWT, {
+  secret: process.env.SECRET,
+});
 
 fastify.get('/', async (request, reply) => {
+  try {
+    await request.jwtVerify();
+    await User.findOne({ name: request.user.name }).orFail();
+  } catch (err) {
+    return err;
+  }
   return { hello: 'world' };
+});
+
+fastify.post('/signup', async (request, reply) => {
+  await User.create(request.body);
+  const token = fastify.jwt.sign(request.body, {
+    expiresIn: '10d',
+  });
+  return { token };
 });
 
 const start = async () => {

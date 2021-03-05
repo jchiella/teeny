@@ -1,4 +1,5 @@
 const fastify = require('fastify')({ logger: true });
+const fastifyCors = require('fastify-cors');
 const fastifyFormbody = require('fastify-formbody');
 const fastifyMongooseAPI = require('fastify-mongoose-api');
 const mongoose = require('mongoose');
@@ -12,6 +13,7 @@ mongoose.connect(process.env.DB, {
 
 const { User, Channel, Post, Comment } = require('./models');
 
+fastify.register(fastifyCors);
 fastify.register(fastifyFormbody);
 fastify.register(fastifyMongooseAPI, {
   models: mongoose.connection.models,

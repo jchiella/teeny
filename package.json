@@ -1,0 +1,26 @@
+{
+  "name": "teeny",
+  "version": "1.0.0",
+  "description": "A tiny news/posting site inspired by Reddit and Hacker News.",
+  "main": "main.js",
+  "scripts": {
+    "dev": "nodemon main.js",
+    "start": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jchiella/teeny.git"
+  },
+  "author": "James Chiella",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jchiella/teeny/issues"
+  },
+  "homepage": "https://github.com/jchiella/teeny#readme",
+  "dependencies": {
+    "fastify": "^3.13.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}

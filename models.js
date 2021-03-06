@@ -5,6 +5,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  passwordHash: {
+    type: String,
+    required: true,
+  },
 }, { timestamps: true });
 
 const channelSchema = new mongoose.Schema({

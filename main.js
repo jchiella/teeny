@@ -4,6 +4,7 @@ const fastifyFormbody = require('fastify-formbody');
 const fastifyMongooseAPI = require('fastify-mongoose-api');
 const fastifyJWT = require('fastify-jwt');
 
+const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 
 require('dotenv').config();
@@ -25,7 +26,7 @@ fastify.register(fastifyMongooseAPI, {
   checkAuth: async (request, reply) => {
     if (request.method !== 'GET') {
       await request.jwtVerify();
-      await User.findOne({ name: request.user.name }).orFail();
+      const { passwordHash } = await User.findOne({ name: request.user.name }).orFail();
     }
   },
 });
@@ -38,10 +39,23 @@ fastify.get('/', async (request, reply) => {
 });
 
 fastify.post('/signup', async (request, reply) => {
-  await User.create(request.body);
-  const token = fastify.jwt.sign(request.body, {
+  const name = request.body.name;
+
+  if (await User.findOne({ name })) {
+    throw new Error('User already exists');
+  }
+
+  const passwordHash = await bcrypt.hash(request.body.password, 10);
+
+  await User.create({
+    name,
+    passwordHash,
+  });
+
+  const token = fastify.jwt.sign({ name }, {
     expiresIn: '10d',
   });
+
   return { token };
 });
 

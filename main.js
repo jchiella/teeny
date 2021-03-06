@@ -22,18 +22,18 @@ fastify.register(fastifyMongooseAPI, {
   prefix: '/api/',
   setDefaults: true,
   methods: ['list', 'get', 'post', 'patch', 'put', 'delete', 'options'],
+  checkAuth: async (request, reply) => {
+    if (request.method !== 'GET') {
+      await request.jwtVerify();
+      await User.findOne({ name: request.user.name }).orFail();
+    }
+  },
 });
 fastify.register(fastifyJWT, {
   secret: process.env.SECRET,
 });
 
 fastify.get('/', async (request, reply) => {
-  try {
-    await request.jwtVerify();
-    await User.findOne({ name: request.user.name }).orFail();
-  } catch (err) {
-    return err;
-  }
   return { hello: 'world' };
 });
 
